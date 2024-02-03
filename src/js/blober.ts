@@ -1,5 +1,9 @@
 import generator from "blobshape";
-import { generateHexColor } from "./helpers";
+import { HexColor, generateHexColor, getRandomInt, removeRandomFromArray } from "./helpers";
+
+export type BlobConfig = {
+    color?: HexColor;
+};
 
 const SVG_SIZE = 400;
 const FILTER = `<defs>
@@ -18,16 +22,10 @@ const possibleTransforms = [
     "translate(-75, 0)",
 ];
                 
-const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-const removeRandomFromArray = (transforms) => {
-    const index = getRandomInt(0, transforms.length - 1);
-    const transform = transforms[index];
-    transforms.splice(index, 1);
-    return transform;
-};
 
-const getPathString = (color) => {
+
+const getPathString = (color: HexColor) => {
     const { path } = generator({
         size: SVG_SIZE,
         growth: 1,
@@ -46,7 +44,7 @@ const getPathString = (color) => {
             </g>`;
         };
 
-const generateBlob = (config = {}, svg) => {
+const generateBlob = (config: BlobConfig = {}, svg: HTMLElement) => {
     if (!config.color) {
         config.color = generateHexColor();
     }
@@ -56,8 +54,8 @@ const generateBlob = (config = {}, svg) => {
     svg.insertAdjacentHTML('afterbegin', purpleBlobString);
 }
 
-export const generateBlobs = (blobConfigs) => {
-    const svg = document.querySelector(".screen");
+export const generateBlobs = (blobConfigs: BlobConfig[]) => {
+    const svg = document.querySelector(".screen") as HTMLElement;
     svg.innerHTML = "";
     svg.insertAdjacentHTML('beforeend', FILTER);
 
