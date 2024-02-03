@@ -1,0 +1,13 @@
+/**
+  |============================
+  | include css partials with
+  | default @import url()
+  |============================
+*/
+@import './global.scss';
+
+
+@import './blocks/sect.scss';
+@import './blocks/screen.scss';
+@import './blocks/controls.scss';
+
