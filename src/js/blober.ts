@@ -16,14 +16,15 @@ const FILTER = `<defs>
                 </defs>`;
 
                 
-const possibleTransforms = [
-    "translate(75, 75)", 
-    "translate(0, -75)",
-    "translate(-75, 0)",
-];
-                
+const generateTransform = () => {
+    const transforms = [
+        `translate(${getRandomInt(-50, 50)}, ${getRandomInt(-50, 50)})`,
+        // `rotate(${getRandomInt(0, 360)})`,
+        // `scale(${getRandomInt(1, 2)})`,
+    ];
 
-
+    return transforms.join(" ");
+}
 
 const getPathString = (color: HexColor) => {
     const { path } = generator({
@@ -31,7 +32,7 @@ const getPathString = (color: HexColor) => {
         growth: 1,
     });
 
-    return `<g transform="${removeRandomFromArray(possibleTransforms)}" filter="url(#filter)">
+    return `<g transform="${generateTransform()}" filter="url(#filter)">
                 <path d="${path}" fill="${color}" >
                     <animate 
                         attributeName="d" 
@@ -57,7 +58,7 @@ const generateBlob = (config: BlobConfig = {}, svg: HTMLElement) => {
 export const generateBlobs = (blobConfigs: BlobConfig[]) => {
     const svg = document.querySelector(".screen") as HTMLElement;
     svg.innerHTML = "";
-    svg.insertAdjacentHTML('beforeend', FILTER);
+    // svg.insertAdjacentHTML('beforeend', FILTER);
 
     blobConfigs.forEach((config) => {
         generateBlob(config, svg);
