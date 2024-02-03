@@ -1,18 +1,18 @@
 {
-  "name": "vanilla-app-template",
+  "name": "blober",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --base=/vanilla-app-template/",
+    "build": "vite build --base=/blober/",
     "preview": "vite preview"
   },
   "devDependencies": {
     "glob": "^8.1.0",
     "vite": "^4.0.5"
   },
-  "author": "Alexander Repeta <alexander.repeta@gmail.com>",
+  "author": "",
   "license": "ISC",
   "dependencies": {
     "blobshape": "^1.0.0",
