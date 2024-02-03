@@ -4,16 +4,33 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/blober/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vanilla App Template</title>
+    <title>Blober</title>
     
     <script type="module" crossorigin src="/blober/commonHelpers.js"></script>
-    <link rel="modulepreload" crossorigin href="/blober/assets/vendor-84288bc5.js">
-    <link rel="stylesheet" href="/blober/assets/index-5b5616db.css">
+    <link rel="modulepreload" crossorigin href="/blober/assets/vendor-a8b16073.js">
+    <link rel="stylesheet" href="/blober/assets/index-24ffd934.css">
   </head>
   <body>
     <main>
       <section class="sect">
         <div class="sect__wrapper">
+          <ul class="export-list">
+            <li>
+              <button class="button" id="load-svg">
+                Load
+              </button>
+            </li>
+            <li>
+              <button class="button" id="copy-svg">
+                Copy as text
+              </button>
+            </li>
+            <li>
+              <button class="button" id="copy-svg-as-base64">
+                Copy as base64
+              </button>
+            </li>
+          </ul>
           <svg
             class="screen"
             width="80vw"
@@ -35,7 +52,7 @@
               font-size="30"
               fill="black"
             >
-              Hello, World!
+              Hello, Blob!
             </text>
           </svg>
           <aside class="controls">
@@ -43,10 +60,8 @@
               <button class="button" id="add-blob" type="button">
                 Add blob
               </button>
-              <button class="button" type="submit">
-                Generate
-              </button>
-              
+              <button class="button" type="submit">Generate</button>
+              <button class="button" type="reset">Clear</button>
             </form>
           </aside>
         </div>
