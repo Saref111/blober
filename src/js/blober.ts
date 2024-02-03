@@ -50,7 +50,6 @@ const generateBlob = (config: BlobConfig = {}, svg: HTMLElement) => {
 export const generateBlobs = (blobConfigs: BlobConfig[]) => {
     const svg = document.querySelector(".screen") as HTMLElement;
     svg.innerHTML = "";
-    // svg.insertAdjacentHTML('beforeend', FILTER);
 
     blobConfigs.forEach((config) => {
         generateBlob(config, svg);
