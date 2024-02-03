@@ -1,3 +1,7 @@
+# Blober App. Create and share your own SVG blobs!
+
+Check out the [live demo](https://saref111.github.io/blober/).
+
 # Vanilla App Template
 
 Цей проект було створено за допомогою Vite. Для знайомства та налаштування
