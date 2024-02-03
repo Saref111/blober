@@ -3,6 +3,7 @@ import { HexColor, generateHexColor, getRandomInt, removeRandomFromArray } from 
 
 export type BlobConfig = {
     color?: HexColor;
+    id: string;
 };
 
 const SVG_SIZE = 400;
@@ -37,7 +38,7 @@ const getPathString = (color: HexColor) => {
             </g>`;
         };
 
-const generateBlob = (config: BlobConfig = {}, svg: HTMLElement) => {
+const generateBlob = (config: BlobConfig, svg: HTMLElement) => {
     if (!config.color) {
         config.color = generateHexColor();
     }
@@ -50,6 +51,7 @@ const generateBlob = (config: BlobConfig = {}, svg: HTMLElement) => {
 export const generateBlobs = (blobConfigs: BlobConfig[]) => {
     const svg = document.querySelector(".screen") as HTMLElement;
     svg.innerHTML = "";
+    svg.insertAdjacentHTML('beforeend', FILTER);
 
     blobConfigs.forEach((config) => {
         generateBlob(config, svg);

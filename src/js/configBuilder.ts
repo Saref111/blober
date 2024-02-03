@@ -1,4 +1,5 @@
 import { BlobConfig } from "./blober";
+import { getUniqueId } from "./helpers";
 
 export const buildConfig = (formElement: HTMLFormElement) => {
     const formData = new FormData(formElement);
@@ -7,7 +8,9 @@ export const buildConfig = (formElement: HTMLFormElement) => {
     for (const [rawKey, value] of formData.entries()) {
         const [key, index] = rawKey.split("_");
         if (!configsArray[index]) {
-            configsArray[index] = {};
+            configsArray[index] = {
+                id: getUniqueId(),
+            };
         } 
         configsArray[index][key as string] = value;
     }

@@ -14,7 +14,6 @@ const getFieldset = (id: number) => {
 
 export const formHandler = (form: HTMLFormElement, generateBlobs: (c: BlobConfig[]) => void) => {
     const addBlobButton = form.querySelector("#add-blob") as HTMLButtonElement;
-    const clearButton = form.querySelector("#clear") as HTMLButtonElement;
 
     addBlobButton.addEventListener("click", () => {
         const newFieldsetId = form.querySelectorAll(".blob-fieldset").length;

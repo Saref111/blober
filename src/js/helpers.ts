@@ -10,3 +10,5 @@ export const removeRandomFromArray = <T>(arr: T[]): T => {
     const index = getRandomInt(0, arr.length - 1);
     return arr.splice(index, 1)[0];
 };
+
+export const getUniqueId = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
