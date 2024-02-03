@@ -1,12 +1,16 @@
 import { BlobConfig } from "./blober";
 
-const buildConfig = (formElement: HTMLFormElement) => {
+export const buildConfig = (formElement: HTMLFormElement) => {
     const formData = new FormData(formElement);
-    const config: BlobConfig = {};
+    const configsArray: any = [];
     
-    for (const [key, value] of formData.entries()) {
-        config[key as string] = value;
+    for (const [rawKey, value] of formData.entries()) {
+        const [key, index] = rawKey.split("_");
+        if (!configsArray[index]) {
+            configsArray[index] = {};
+        } 
+        configsArray[index][key as string] = value;
     }
     
-    return config;
+    return configsArray as BlobConfig[];
 };

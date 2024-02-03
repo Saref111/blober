@@ -1,3 +1,6 @@
-import {generateBlobs} from "./js/blober.js";
+import { generateBlobs } from "./js/blober.js";
+import { formHandler } from "./js/formHandler.js";
 
-generateBlobs([{}]);
+
+const form = document.querySelector(".controls__form") as HTMLFormElement;
+formHandler(form, generateBlobs);
