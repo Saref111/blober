@@ -16,15 +16,7 @@ const FILTER = `<defs>
                 </defs>`;
 
                 
-const generateTransform = () => {
-    const transforms = [
-        `translate(${getRandomInt(-50, 50)}, ${getRandomInt(-50, 50)})`,
-        // `rotate(${getRandomInt(0, 360)})`,
-        // `scale(${getRandomInt(1, 2)})`,
-    ];
-
-    return transforms.join(" ");
-}
+const generateTransform = () => `translate(${getRandomInt(-300, 300)}, ${getRandomInt(-300, 300)})`;
 
 const getPathString = (color: HexColor) => {
     const { path } = generator({

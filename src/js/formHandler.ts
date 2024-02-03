@@ -17,7 +17,7 @@ export const formHandler = (form: HTMLFormElement, generateBlobs: (c: BlobConfig
 
     addBlobButton.addEventListener("click", () => {
         const newFieldsetId = form.querySelectorAll(".blob-fieldset").length;
-        form.insertAdjacentHTML("afterbegin", getFieldset(newFieldsetId));
+        form.insertAdjacentHTML("beforeend", getFieldset(newFieldsetId));
     });
 
     form.addEventListener("submit", (e) => {
@@ -26,6 +26,6 @@ export const formHandler = (form: HTMLFormElement, generateBlobs: (c: BlobConfig
         generateBlobs(configsArray);
     });
 
-    form.insertAdjacentHTML("afterbegin", getFieldset(0));
+    form.insertAdjacentHTML("beforeend", getFieldset(0));
 
 }
