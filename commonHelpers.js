@@ -38,7 +38,7 @@ import{b as d,i as y}from"./assets/vendor-a8b16073.js";(function(){const t=docum
         </label>
         <label>
           <span>Seed:</span>
-          <input value="${s}" type="text" name="seed_${e}" id="seed_${e}" />
+          <input value="${s}" type="number" name="seed_${e}" id="seed_${e}" />
         </label>
         <button type="button" class="remove-blob">Remove</button>
     `,o.querySelector(".remove-blob").addEventListener("click",()=>k(e)),o.addEventListener("dragstart",r=>{var i;(i=r.dataTransfer)==null||i.setData("text/plain",e)}),o.addEventListener("drop",r=>_(r,e)),o.addEventListener("dragover",r=>{r.preventDefault()}),o},I=e=>{const t=e.target,[s,o]=t.name.split("_"),n=a.findEntity(i=>i.id===o);if(!n)return;let r={...n};s==="color"?r.color=t.value:s==="seed"&&(r.seed=parseInt(t.value,10)),a.updateEntity(n,r)},q=e=>{const t=e.querySelector("#add-blob"),s=o=>{o==null||o.preventDefault();const n=a.getEntities();e.querySelectorAll(".blob-fieldset").forEach(r=>r.remove()),n.forEach(r=>{e.insertAdjacentElement("beforeend",M(r))})};t.addEventListener("click",()=>{const o=T();a.addEntity(o)}),e.addEventListener("reset",o=>{o.preventDefault(),e.querySelectorAll(".blob-fieldset").forEach(n=>n.remove()),a.clear()}),document.addEventListener("update",s),e.addEventListener("input",I),s()},z=document.querySelector(".controls__form");$();q(z);document.addEventListener("update",()=>{v(a.getEntities())});v(a.getEntities());
