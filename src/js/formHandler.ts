@@ -37,8 +37,8 @@ export const formHandler = (form: HTMLFormElement) => {
   const updateView = (e?: Event) => {
     e?.preventDefault();
     const blobs = blobStorage.getEntities();
-    form.querySelectorAll('.blob-fieldset').forEach(el => el.remove());
-    blobs.forEach(blob => {
+    form.querySelectorAll('.blob-fieldset').forEach((el) => el.remove());
+    blobs.forEach((blob) => {
       form.insertAdjacentElement('beforeend', getFieldset(blob));
     });
   };
@@ -48,10 +48,10 @@ export const formHandler = (form: HTMLFormElement) => {
     blobStorage.addEntity(newBlobConfig);
   });
 
-  form.addEventListener('reset', e => {
+  form.addEventListener('reset', (e) => {
     e.preventDefault();
     blobStorage.clear();
-    form.querySelectorAll('.blob-fieldset').forEach(el => el.remove());
+    form.querySelectorAll('.blob-fieldset').forEach((el) => el.remove());
   });
   document.addEventListener('update', updateView);
   updateView();
