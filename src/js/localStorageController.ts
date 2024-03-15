@@ -24,7 +24,7 @@ class LocalStorageController<T> {
   clear() {
     this.entities.clear();
     this.storage.removeItem(this.metakey);
-    document.dispatchEvent(new Event("update"));
+    document.dispatchEvent(new Event('update'));
   }
 
   addEntity(key: T) {
@@ -55,8 +55,11 @@ class LocalStorageController<T> {
 
   updateEntity(key: T, value: T) {
     if (this.entities.has(key)) {
-      this.entities.delete(key);
-      this.entities.add(value);
+      const entities = Array.from(this.entities);
+      const index = entities.findIndex((entity) => entity === key);
+      entities[index] = value;
+      this.entities = new Set(entities);
+
       this.save();
     }
   }
