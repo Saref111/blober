@@ -12,15 +12,15 @@ export type BlobConfig = {
 const SVG_SIZE = 650;
 
 const FILTER = `<defs>
-                   
+                    <filter id="filter" x="-100" y="-100" width="750" height="750"
+                    filterUnits="userSpaceOnUse" col4or-interpolation-filters="sRGB">
+                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                        <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+                        <feGaussianBlur stdDeviation="65.5" result="effect1_foregroundBlur_32_5690" />
+                    </filter>                   
                 </defs>`;
 
-// <filter id="filter" x="-100" y="-100" width="750" height="750"
-// filterUnits="userSpaceOnUse" col4or-interpolation-filters="sRGB">
-//     <feFlood flood-opacity="0" result="BackgroundImageFix" />
-//     <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-//     <feGaussianBlur stdDeviation="65.5" result="effect1_foregroundBlur_32_5690" />
-// </filter>
+
 
 const DEFAULT_SCREEN = ` <circle
                             cx="250"
