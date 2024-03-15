@@ -42,6 +42,6 @@ export const formHandler = (form: HTMLFormElement) => {
     blobStorage.clear();
   });
   document.addEventListener('update', updateView);
-  form.addEventListener('input', updateBlob);
+  form.addEventListener('change', updateBlob);
   updateView();
 };

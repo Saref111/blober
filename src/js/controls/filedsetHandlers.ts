@@ -10,25 +10,37 @@ const removeBlob = (id: string) => {
 };
 
 const onFieldsetDrop = (event: DragEvent, id: string) => {
-    event.preventDefault();
-    const draggedId = event.dataTransfer?.getData('text/plain');
-    if (draggedId === id) {
-      return;
-    }
-    const draggedBlob = blobStorage.findEntity(
-      (blob: BlobConfig) => blob.id === draggedId
-    );
-    const targetBlob = blobStorage.findEntity(
-      (blob: BlobConfig) => blob.id === id
-    );
-    if (!draggedBlob || !targetBlob) {
-      return;
-    }
-    blobStorage.moveEntity(
-      draggedBlob,
-      blobStorage.getEntities().indexOf(targetBlob)
-    );
+  event.preventDefault();
+  const draggedId = event.dataTransfer?.getData('text/plain');
+  if (draggedId === id) {
+    return;
   }
+  const draggedBlob = blobStorage.findEntity(
+    (blob: BlobConfig) => blob.id === draggedId
+  );
+  const targetBlob = blobStorage.findEntity(
+    (blob: BlobConfig) => blob.id === id
+  );
+  if (!draggedBlob || !targetBlob) {
+    return;
+  }
+  blobStorage.moveEntity(
+    draggedBlob,
+    blobStorage.getEntities().indexOf(targetBlob)
+  );
+};
+
+const setDragNDropHandlers = (fieldset: HTMLFieldSetElement, id: string) => {
+  fieldset.addEventListener('dragstart', (event: DragEvent) => {
+    event.dataTransfer?.setData('text/plain', id);
+  });
+
+  fieldset.addEventListener('drop', (e) => onFieldsetDrop(e, id));
+
+  fieldset.addEventListener('dragover', (event) => {
+    event.preventDefault();
+  });
+};
 
 export const getFieldset = ({ id, color, seed }: BlobConfig) => {
   const fieldset = document.createElement('fieldset');
@@ -52,14 +64,6 @@ export const getFieldset = ({ id, color, seed }: BlobConfig) => {
   ) as HTMLButtonElement;
   removeButton.addEventListener('click', () => removeBlob(id));
 
-  fieldset.addEventListener('dragstart', (event: DragEvent) => {
-    event.dataTransfer?.setData('text/plain', id);
-  });
-
-  fieldset.addEventListener('drop', (e) => onFieldsetDrop(e, id) );
-
-  fieldset.addEventListener('dragover', (event) => {
-    event.preventDefault();
-  });
+  setDragNDropHandlers(fieldset, id);
   return fieldset;
 };
