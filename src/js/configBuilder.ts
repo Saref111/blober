@@ -1,5 +1,3 @@
-import generator from 'blobshape';
-
 import { BlobConfig } from './blober';
 import { generateHexColor, generateTransform, getUniqueId } from './helpers';
 
