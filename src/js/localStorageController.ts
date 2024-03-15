@@ -53,11 +53,11 @@ class LocalStorageController<T> {
     return Array.from(this.entities).find(predicate);
   }
 
-  updateEntity(key: T, value: T) {
-    if (this.entities.has(key)) {
+  updateEntity(prevValue: T, newValue: T) {
+    if (this.entities.has(prevValue)) {
       const entities = Array.from(this.entities);
-      const index = entities.findIndex((entity) => entity === key);
-      entities[index] = value;
+      const index = entities.findIndex((entity) => entity === prevValue);
+      entities[index] = newValue;
       this.entities = new Set(entities);
 
       this.save();
