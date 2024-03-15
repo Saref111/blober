@@ -1,4 +1,7 @@
 .screen {
     width: 80vw;
     height: 100vh;
+    & > g {
+        cursor: grab;
+    }
 }

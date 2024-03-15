@@ -1,6 +1,5 @@
 import { BlobConfig } from './blober';
 import { blobStorage } from './localStorageController';
-import { HexColor } from './helpers';
 import { generateNewBlobConfig } from './configBuilder';
 
 const removeBlob = (id: string) => {
@@ -41,7 +40,7 @@ const updateBlob = (e: Event) => {
   }
   let updatedBlob = { ...blob };
   if (type === 'color') {
-    updatedBlob.color = target.value as HexColor;
+    updatedBlob.color = target.value;
   } else if (type === 'seed') {
     updatedBlob.seed = parseInt(target.value, 10);
   }

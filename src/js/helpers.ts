@@ -1,11 +1,11 @@
+import { TransformationType } from "./blober";
+
 export const generateHexColor = (): string => {
     let color = "#";
     for (let i = 0; i < 3; i++) {
         let component = Math.floor(Math.random() * 256).toString(16);
         color += component.padStart(2, '0');
     }
-    console.log(color);
-    
     return color;
 }
 
@@ -18,4 +18,4 @@ export const removeRandomFromArray = <T>(arr: T[]): T => {
 
 export const getUniqueId = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
 
-export const generateTransform = () => `translate(${getRandomInt(-300, 300)}, ${getRandomInt(-300, 300)})`;
+export const generateTransformType = (): TransformationType => "translate";

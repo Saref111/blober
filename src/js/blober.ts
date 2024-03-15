@@ -1,11 +1,18 @@
 import generator from 'blobshape';
-import { HexColor, generateHexColor } from './helpers';
+import { generateHexColor } from './helpers';
 import { SVG_SIZE, DEFAULT_SCREEN, FILTER } from './constants';
 
+export type TransformationType = 'translate' | 'rotate' | 'scale' | 'skewX' | 'skewY';
+
+type Transformation = {
+  type: TransformationType;
+  args: number[];
+}
+
 export type BlobConfig = {
-  color: HexColor;
+  color: string;
   id: string;
-  transform: string;
+  transform: Transformation;
   filterId: string;
   seed: number;
 };
@@ -28,7 +35,7 @@ const getPathString = (cfg: BlobConfig) => {
       seed: (cfg.seed + 2).toString(),
     }).path,
   ];
-  return `<g transform="${cfg.transform}" filter="url(#${cfg.filterId})">
+  return `<g transform="${cfg.transform.type}(${cfg.transform.args.join(', ')})" filter="url(#${cfg.filterId})">
                 <path d="${path}" fill="${cfg.color}" >
                     <animate 
                         attributeName="d" 
@@ -39,6 +46,13 @@ const getPathString = (cfg: BlobConfig) => {
                     />
                 </path>
             </g>`;
+};
+
+const handleSVGGroup = (blobConfig: BlobConfig, blobSVGString: string) => {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.innerHTML = blobSVGString;
+  const group = svg.querySelector('g') as SVGElement;
+  return group;
 };
 
 const generateBlob = (config: BlobConfig, svg: HTMLElement) => {
