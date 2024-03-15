@@ -8,7 +8,7 @@
     
     <script type="module" crossorigin src="/blober/commonHelpers.js"></script>
     <link rel="modulepreload" crossorigin href="/blober/assets/vendor-a8b16073.js">
-    <link rel="stylesheet" href="/blober/assets/index-5dfcd0b7.css">
+    <link rel="stylesheet" href="/blober/assets/index-156304e4.css">
   </head>
   <body>
     <main>
@@ -16,14 +16,10 @@
         <div class="sect__wrapper">
           <ul class="export-list">
             <li>
-              <button class="button" id="load-svg">
-                Load
-              </button>
+              <button class="button" id="load-svg">Load</button>
             </li>
             <li>
-              <button class="button" id="copy-svg">
-                Copy as text
-              </button>
+              <button class="button" id="copy-svg">Copy as text</button>
             </li>
             <li>
               <button class="button" id="copy-svg-as-base64">
@@ -31,36 +27,37 @@
               </button>
             </li>
           </ul>
-          <svg
-            class="screen"
-            width="80vw"
-            height="100vh"
-            viewBox="-100 -100 650 650"
-          >
-            <circle
-              cx="250"
-              cy="250"
-              r="200"
-              fill="none"
-              stroke="black"
-              stroke-width="2"
-            />
-            <text
-              x="50%"
-              y="50%"
-              text-anchor="middle"
-              font-size="30"
-              fill="black"
-            >
-              Hello, Blob!
-            </text>
-          </svg>
+          <div class="screen-wrapper" width="80vw">
+            <svg class="screen" width="80vw" viewBox="-100 -100 650 650">
+              <circle
+                cx="250"
+                cy="250"
+                r="200"
+                fill="none"
+                stroke="black"
+                stroke-width="2"
+              />
+              <text
+                x="50%"
+                y="50%"
+                text-anchor="middle"
+                font-size="30"
+                fill="black"
+              >
+                Hello, Blob!
+              </text>
+            </svg>
+          </div>
           <aside class="controls">
             <form class="controls__form">
               <button class="button" id="add-blob" type="button">
                 Add blob
               </button>
               <button class="button" type="reset">Clear</button>
+              <input type="checkbox" name="show-hide" id="show-hide" checked />
+              <label for="show-hide">
+                Show
+              </label>
             </form>
           </aside>
         </div>
