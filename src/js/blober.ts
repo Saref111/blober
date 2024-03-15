@@ -41,7 +41,7 @@ const getPathString = (cfg: BlobConfig) => {
       seed: (cfg.seed + 2).toString(),
     }).path,
   ];
-  return `<g transform="${cfg.transform.type}(${cfg.transform.args.join(
+  return `<g style="--color: ${cfg.color};" transform="${cfg.transform.type}(${cfg.transform.args.join(
     ', '
   )})" filter="url(#${cfg.filterId})">
                 <path d="${path}" fill="${cfg.color}" >

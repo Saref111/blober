@@ -3,5 +3,9 @@
     height: 100vh;
     & > g {
         cursor: grab;
+
+        &:hover {
+            outline: 5px dashed var(--color);
+        }
     }
 }
