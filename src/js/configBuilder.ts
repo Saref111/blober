@@ -7,6 +7,7 @@ import { blobStorage } from './localStorageController';
 const SVG_SIZE = 650;
 
 export const generateNewBlobConfig = (): BlobConfig => {
+    const seed  = Math.floor(Math.random() * 1000_000_000);
   return {
     id: getUniqueId(),
     path: generator({
@@ -16,36 +17,19 @@ export const generateNewBlobConfig = (): BlobConfig => {
     transform: generateTransform(),
     filterId: 'filter',
     color: generateHexColor(),
-    seed: Math.floor(Math.random() * 1000_000_000),
+    seed,
     animationPaths: [
       generator({
         size: SVG_SIZE,
         growth: 1.5,
+        seed: (seed + 1).toString(),
       }).path,
       generator({
         size: SVG_SIZE,
         growth: 2,
+        seed: (seed + 2).toString(),
       }).path,
     ],
   };
 };
 
-// export const buildConfig = (formElement: HTMLFormElement) => {
-//   const formData = new FormData(formElement);
-
-//   for (const [rawKey, value] of formData.entries()) {
-//     const [key, id] = rawKey.split('_');
-//     if (!blobStorage.has(id)) {
-//       blobStorage.addEntity(generateNewBlobConfig());
-//     }
-//     const currentBlob = blobStorage.findEntity(
-//       entity => entity.id === id
-//     ) as BlobConfig;
-//     blobStorage.updateEntity(currentBlob, {
-//       ...currentBlob,
-//       [key]: value,
-//     });
-//   }
-
-//   return blobStorage.getEntities();
-// };
