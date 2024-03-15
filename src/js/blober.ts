@@ -1,38 +1,36 @@
-import generator from "blobshape";
+
 import { HexColor, generateHexColor, getRandomInt, removeRandomFromArray } from "./helpers";
 
 export type BlobConfig = {
     color?: HexColor;
     id: string;
+    path: string;
+    transform: string;
+    filterId: string;
+    animationPaths: string[];
 };
 
-const SVG_SIZE = 400;
 const FILTER = `<defs>
-                    <filter id="filter" x="-100" y="-100" width="750" height="750"
-                    filterUnits="userSpaceOnUse" col4or-interpolation-filters="sRGB">
-                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                        <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-                        <feGaussianBlur stdDeviation="65.5" result="effect1_foregroundBlur_32_5690" />
-                    </filter>
+                   
                 </defs>`;
 
-                
-const generateTransform = () => `translate(${getRandomInt(-300, 300)}, ${getRandomInt(-300, 300)})`;
+                // <filter id="filter" x="-100" y="-100" width="750" height="750"
+                // filterUnits="userSpaceOnUse" col4or-interpolation-filters="sRGB">
+                //     <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                //     <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+                //     <feGaussianBlur stdDeviation="65.5" result="effect1_foregroundBlur_32_5690" />
+                // </filter>
 
-const getPathString = (color: HexColor) => {
-    const { path } = generator({
-        size: SVG_SIZE,
-        growth: 1,
-    });
+const getPathString = (cfg: BlobConfig) => {
 
-    return `<g transform="${generateTransform()}" filter="url(#filter)">
-                <path d="${path}" fill="${color}" >
+    return `<g transform="${cfg.transform}" filter="url(#${cfg.filterId})">
+                <path d="${cfg.path}" fill="${cfg.color}" >
                     <animate 
                         attributeName="d" 
                         dur="10s" 
                         repeatCount="indefinite" 
                         keyTimes="0;0.33;0.67;1" 
-                        values="${path};${generator({ size: SVG_SIZE, growth: 1.5 }).path};${generator({ size: SVG_SIZE, growth: 1.5 }).path};${path}" 
+                        values="${cfg.path};${cfg.animationPaths.join(';')};${cfg.path}" 
                     />
                 </path>
             </g>`;
@@ -43,9 +41,9 @@ const generateBlob = (config: BlobConfig, svg: HTMLElement) => {
         config.color = generateHexColor();
     }
 
-    const purpleBlobString = getPathString(config.color);
+    const blob = getPathString(config);
 
-    svg.insertAdjacentHTML('afterbegin', purpleBlobString);
+    svg.insertAdjacentHTML('afterbegin', blob);
 }
 
 export const generateBlobs = (blobConfigs: BlobConfig[]) => {

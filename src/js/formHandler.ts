@@ -1,9 +1,10 @@
-import { BlobConfig } from "./blober";
-import { buildConfig } from "./configBuilder";
-import { generateHexColor } from "./helpers";
+import { BlobConfig } from './blober';
+import { buildConfig } from './configBuilder';
+import { generateHexColor } from './helpers';
+import { blobStorage } from './localStorageController';
 
 const getFieldset = (id: number) => {
-    return `
+  return `
         <fieldset class="blob-fieldset">
             <label>
                 <span>Color:</span>
@@ -12,26 +13,40 @@ const getFieldset = (id: number) => {
         </fieldset>`;
 };
 
-export const formHandler = (form: HTMLFormElement, generateBlobs: (c: BlobConfig[]) => void) => {
-    const addBlobButton = form.querySelector("#add-blob") as HTMLButtonElement;
+export const formHandler = (
+  form: HTMLFormElement,
+  generateBlobs: (c: BlobConfig[]) => void
+) => {
+  const addBlobButton = form.querySelector('#add-blob') as HTMLButtonElement;
 
-    addBlobButton.addEventListener("click", () => {
-        const newFieldsetId = form.querySelectorAll(".blob-fieldset").length;
-        form.insertAdjacentHTML("beforeend", getFieldset(newFieldsetId));
-    });
+  const updateView = (e: Event) => {
+    e.preventDefault();
+    const configsArray = buildConfig(form);
+    generateBlobs(configsArray);
+  };
 
-    form.addEventListener("reset", (e) => {
-        e.preventDefault();
-        form.querySelectorAll(".blob-fieldset").forEach((el) => el.remove());
-        form.insertAdjacentHTML("beforeend", getFieldset(0));
-    });
+  const dispatchUpdate = () => {
+    form.dispatchEvent(new Event('update'));
+    console.log('dispatched update event');
+    
+  };
 
-    form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const configsArray = buildConfig(form);
-        generateBlobs(configsArray);
-    });
+  addBlobButton.addEventListener('click', () => {
+    const newFieldsetId = form.querySelectorAll('.blob-fieldset').length;
+    form.insertAdjacentHTML('beforeend', getFieldset(newFieldsetId));
+    dispatchUpdate();
+  });
 
-    form.insertAdjacentHTML("beforeend", getFieldset(0));
+  form.addEventListener('reset', e => {
+    e.preventDefault();
+    blobStorage.clear();
+    form.querySelectorAll('.blob-fieldset').forEach(el => el.remove());
+    form.insertAdjacentHTML('beforeend', getFieldset(0));
+    dispatchUpdate();
+  });
+  form.addEventListener('input', dispatchUpdate);
+  form.addEventListener('update', updateView);
 
-}
+  form.insertAdjacentHTML('beforeend', getFieldset(0));
+  dispatchUpdate();
+};

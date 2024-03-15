@@ -12,3 +12,5 @@ export const removeRandomFromArray = <T>(arr: T[]): T => {
 };
 
 export const getUniqueId = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
+
+export const generateTransform = () => `translate(${getRandomInt(-300, 300)}, ${getRandomInt(-300, 300)})`;
