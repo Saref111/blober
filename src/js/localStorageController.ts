@@ -63,6 +63,14 @@ class LocalStorageController<T> {
       this.save();
     }
   }
+
+  moveEntity(entity: T, newIndex: number) {
+    const entities = Array.from(this.entities);
+    const newEntities = entities.filter((e) => e !== entity);
+    newEntities.splice(newIndex, 0, entity);
+    this.entities = new Set(newEntities);
+    this.save();
+  }
 }
 
 export const blobStorage = new LocalStorageController<BlobConfig>(

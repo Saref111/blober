@@ -12,6 +12,9 @@ const removeBlob = (id: string) => {
 
 const getFieldset = ({ id, color, seed }: BlobConfig) => {
   const fieldset = document.createElement('fieldset');
+  fieldset.setAttribute('id', `blob_${id}`);
+  fieldset.setAttribute('draggable', `true`);
+  fieldset.setAttribute('style', `--color: ${color};`);
   fieldset.classList.add('blob-fieldset');
   fieldset.innerHTML = `
       <label>
@@ -28,6 +31,35 @@ const getFieldset = ({ id, color, seed }: BlobConfig) => {
     '.remove-blob'
   ) as HTMLButtonElement;
   removeButton.addEventListener('click', () => removeBlob(id));
+
+  fieldset.addEventListener('dragstart', (event: DragEvent) => {
+    event.dataTransfer?.setData('text/plain', id);
+  });
+
+  fieldset.addEventListener('drop', (event) => {
+    event.preventDefault();
+    const draggedId = event.dataTransfer?.getData('text/plain');
+    if (draggedId === id) {
+      return;
+    }
+    const draggedBlob = blobStorage.findEntity(
+      (blob: BlobConfig) => blob.id === draggedId
+    );
+    const targetBlob = blobStorage.findEntity(
+      (blob: BlobConfig) => blob.id === id
+    );
+    if (!draggedBlob || !targetBlob) {
+      return;
+    }
+    blobStorage.moveEntity(
+      draggedBlob,
+      blobStorage.getEntities().indexOf(targetBlob)
+    );
+  });
+
+  fieldset.addEventListener('dragover', (event) => {
+    event.preventDefault();
+  });
   return fieldset;
 };
 
@@ -66,8 +98,8 @@ export const formHandler = (form: HTMLFormElement) => {
 
   form.addEventListener('reset', (e) => {
     e.preventDefault();
-    blobStorage.clear();
     form.querySelectorAll('.blob-fieldset').forEach((el) => el.remove());
+    blobStorage.clear();
   });
   document.addEventListener('update', updateView);
   form.addEventListener('input', updateBlob);
