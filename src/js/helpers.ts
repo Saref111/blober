@@ -1,7 +1,12 @@
-export type HexColor = `#${string}`;
-
-export const generateHexColor = (): HexColor => {
-    return `#${Math.floor(Math.random()*16777215).toString(16)}`;
+export const generateHexColor = (): string => {
+    let color = "#";
+    for (let i = 0; i < 3; i++) {
+        let component = Math.floor(Math.random() * 256).toString(16);
+        color += component.padStart(2, '0');
+    }
+    console.log(color);
+    
+    return color;
 }
 
 export const getRandomInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
