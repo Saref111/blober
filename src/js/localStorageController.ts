@@ -15,6 +15,7 @@ class LocalStorageController<T> {
     
     protected save() {
         this.storage.setItem(this.metakey, JSON.stringify(Array.from(this.entities)));
+        document.dispatchEvent(new Event("update"));
     }
 
     clear() {

@@ -2,12 +2,13 @@
 import { HexColor, generateHexColor, getRandomInt, removeRandomFromArray } from "./helpers";
 
 export type BlobConfig = {
-    color?: HexColor;
+    color: HexColor;
     id: string;
     path: string;
     transform: string;
     filterId: string;
     animationPaths: string[];
+    seed: number;
 };
 
 const FILTER = `<defs>
@@ -52,6 +53,8 @@ export const generateBlobs = (blobConfigs: BlobConfig[]) => {
     svg.insertAdjacentHTML('beforeend', FILTER);
 
     blobConfigs.forEach((config) => {
+        console.log(config);
+        
         generateBlob(config, svg);
     });
     

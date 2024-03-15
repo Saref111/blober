@@ -1,52 +1,39 @@
 import { BlobConfig } from './blober';
-import { buildConfig } from './configBuilder';
-import { generateHexColor } from './helpers';
 import { blobStorage } from './localStorageController';
+import { generateNewBlobConfig } from './configBuilder';
 
-const getFieldset = (id: number) => {
+const getFieldset = ({id, color}: BlobConfig) => {
   return `
         <fieldset class="blob-fieldset">
             <label>
                 <span>Color:</span>
-                <input value="${generateHexColor()}" type="color" name="color_${id}" id="color_${id}" />
+                <input value="${color}" type="color" name="color_${id}" id="color_${id}" />
             </label>
         </fieldset>`;
 };
 
-export const formHandler = (
-  form: HTMLFormElement,
-  generateBlobs: (c: BlobConfig[]) => void
-) => {
+export const formHandler = (form: HTMLFormElement) => {
   const addBlobButton = form.querySelector('#add-blob') as HTMLButtonElement;
 
-  const updateView = (e: Event) => {
-    e.preventDefault();
-    const configsArray = buildConfig(form);
-    generateBlobs(configsArray);
-  };
-
-  const dispatchUpdate = () => {
-    form.dispatchEvent(new Event('update'));
-    console.log('dispatched update event');
-    
+  const updateView = (e?: Event) => {
+    e?.preventDefault();
+    const blobs = blobStorage.getEntities();
+    form.querySelectorAll('.blob-fieldset').forEach(el => el.remove());
+    blobs.forEach(blob => {
+      form.insertAdjacentHTML('beforeend', getFieldset(blob));
+    });
   };
 
   addBlobButton.addEventListener('click', () => {
-    const newFieldsetId = form.querySelectorAll('.blob-fieldset').length;
-    form.insertAdjacentHTML('beforeend', getFieldset(newFieldsetId));
-    dispatchUpdate();
+    const newBlobConfig: BlobConfig = generateNewBlobConfig();
+    blobStorage.addEntity(newBlobConfig);
   });
 
   form.addEventListener('reset', e => {
     e.preventDefault();
     blobStorage.clear();
     form.querySelectorAll('.blob-fieldset').forEach(el => el.remove());
-    form.insertAdjacentHTML('beforeend', getFieldset(0));
-    dispatchUpdate();
   });
-  form.addEventListener('input', dispatchUpdate);
-  form.addEventListener('update', updateView);
-
-  form.insertAdjacentHTML('beforeend', getFieldset(0));
-  dispatchUpdate();
+  document.addEventListener('update', updateView);
+  updateView();
 };
