@@ -43,7 +43,7 @@ const getPathString = (cfg: BlobConfig) => {
   ];
   return `<g style="--color: ${cfg.color};" transform="${cfg.transform.type}(${cfg.transform.args.join(
     ', '
-  )})" filter="url(#${cfg.filterId})">
+  )})" filter="url(#${cfg.filterId})" id="${cfg.id}">
                 <path d="${path}" fill="${cfg.color}" >
                     <animate 
                         attributeName="d" 
@@ -90,6 +90,17 @@ const handleSVGGroup = (blobConfig: BlobConfig, blobSVGString: string) => {
         },
       });
     });
+  });
+
+  group.addEventListener('mouseover', () => {
+    const fieldset = document.getElementById(`blob_${blobConfig.id}`);
+    if (!fieldset) return;
+    fieldset.classList.add('blob-fieldset--hover');
+  });
+  group.addEventListener('mouseout', () => {
+    const fieldset = document.getElementById(`blob_${blobConfig.id}`);
+    if (!fieldset) return;
+    fieldset.classList.remove('blob-fieldset--hover');
   });
 
   return group;

@@ -64,6 +64,18 @@ export const getFieldset = ({ id, color, seed }: BlobConfig) => {
   ) as HTMLButtonElement;
   removeButton.addEventListener('click', () => removeBlob(id));
 
+  fieldset.addEventListener('mouseover', () => {
+    const [_, id] = fieldset.id.split('_');
+    const group = document.getElementById(`${id}`);
+    if (!group) return;
+    group.classList.add('hover');
+  });
+  fieldset.addEventListener('mouseout', () => {
+    const [_, id] = fieldset.id.split('_');
+    const group = document.getElementById(`${id}`);
+    if (!group) return;
+    group.classList.remove('hover');
+  });
   setDragNDropHandlers(fieldset, id);
   return fieldset;
 };
