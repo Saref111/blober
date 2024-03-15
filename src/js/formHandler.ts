@@ -2,13 +2,18 @@ import { BlobConfig } from './blober';
 import { blobStorage } from './localStorageController';
 import { generateNewBlobConfig } from './configBuilder';
 
-const getFieldset = ({id, color}: BlobConfig) => {
+const getFieldset = ({id, color, seed}: BlobConfig) => {
   return `
         <fieldset class="blob-fieldset">
             <label>
                 <span>Color:</span>
                 <input value="${color}" type="color" name="color_${id}" id="color_${id}" />
             </label>
+            <label>
+              <span>Seed:</span>
+              <input value="${seed}" type="text" name="seed_${id}" id="seed_${id}" />
+            </label>
+            <button class="remove-blob" data-id="${id}">Remove TODO</button>
         </fieldset>`;
 };
 

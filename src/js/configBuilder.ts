@@ -2,7 +2,6 @@ import generator from 'blobshape';
 
 import { BlobConfig } from './blober';
 import { generateHexColor, generateTransform, getUniqueId } from './helpers';
-import { blobStorage } from './localStorageController';
 
 const SVG_SIZE = 650;
 
