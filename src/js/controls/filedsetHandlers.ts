@@ -43,7 +43,7 @@ export const getFieldset = ({ id, color, seed }: BlobConfig) => {
         </label>
         <label>
           <span>Seed:</span>
-          <input value="${seed}" type="text" name="seed_${id}" id="seed_${id}" />
+          <input value="${seed}" type="number" name="seed_${id}" id="seed_${id}" />
         </label>
         <button type="button" class="remove-blob">Remove</button>
     `;
