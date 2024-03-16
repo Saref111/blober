@@ -1,53 +1,14 @@
 import { BlobConfig } from '../blober';
-import { blobStorage } from '../localStorageController';
+import {
+  setDragNDropHandlers,
+  setFieldsetAttrs,
+  setMouseOver,
+  setRemoveButton,
+} from './handlerSetters';
 
-const removeBlob = (id: string) => {
-  const blob = blobStorage.findEntity((blob: BlobConfig) => blob.id === id);
-  if (!blob) {
-    return;
-  }
-  blobStorage.removeEntity(blob);
-};
-
-const onFieldsetDrop = (event: DragEvent, id: string) => {
-  event.preventDefault();
-  const draggedId = event.dataTransfer?.getData('text/plain');
-  if (draggedId === id) {
-    return;
-  }
-  const draggedBlob = blobStorage.findEntity(
-    (blob: BlobConfig) => blob.id === draggedId
-  );
-  const targetBlob = blobStorage.findEntity(
-    (blob: BlobConfig) => blob.id === id
-  );
-  if (!draggedBlob || !targetBlob) {
-    return;
-  }
-  blobStorage.moveEntity(
-    draggedBlob,
-    blobStorage.getEntities().indexOf(targetBlob)
-  );
-};
-
-const setDragNDropHandlers = (fieldset: HTMLFieldSetElement, id: string) => {
-  fieldset.addEventListener('dragstart', (event: DragEvent) => {
-    event.dataTransfer?.setData('text/plain', id);
-  });
-
-  fieldset.addEventListener('drop', (e) => onFieldsetDrop(e, id));
-
-  fieldset.addEventListener('dragover', (event) => {
-    event.preventDefault();
-  });
-};
-
-export const getFieldset = ({ id, color, seed }: BlobConfig) => {
+export const getFieldset = ({ id, color, seed, animation }: BlobConfig) => {
   const fieldset = document.createElement('fieldset');
-  fieldset.setAttribute('id', `blob_${id}`);
-  fieldset.setAttribute('draggable', `true`);
-  fieldset.setAttribute('style', `--color: ${color};`);
-  fieldset.classList.add('blob-fieldset');
+  setFieldsetAttrs(fieldset, id, color);
   fieldset.innerHTML = `
         <label>
             <span>Color:</span>
@@ -57,25 +18,26 @@ export const getFieldset = ({ id, color, seed }: BlobConfig) => {
           <span>Seed:</span>
           <input value="${seed}" type="number" name="seed_${id}" id="seed_${id}" />
         </label>
+        <details>
+          <summary>Animation</summary>
+          <label>
+            <span>Play:</span>
+            <input ${
+              animation.play && 'checked'
+            } type="checkbox" name="animation_${id}" id="animation_${id}" />
+          </label>
+          <label>
+            <span>Speed (s):</span>
+            <input value="${
+              animation.speed
+            }" type="number" name="speed_${id}" id="speed_${id}" />
+          </label>
+        </details>
         <button type="button" class="remove-blob">Remove</button>
     `;
-  const removeButton = fieldset.querySelector(
-    '.remove-blob'
-  ) as HTMLButtonElement;
-  removeButton.addEventListener('click', () => removeBlob(id));
 
-  fieldset.addEventListener('mouseover', () => {
-    const [_, id] = fieldset.id.split('_');
-    const group = document.getElementById(`${id}`);
-    if (!group) return;
-    group.classList.add('hover');
-  });
-  fieldset.addEventListener('mouseout', () => {
-    const [_, id] = fieldset.id.split('_');
-    const group = document.getElementById(`${id}`);
-    if (!group) return;
-    group.classList.remove('hover');
-  });
+  setRemoveButton(fieldset, id);
+  setMouseOver(fieldset);
   setDragNDropHandlers(fieldset, id);
   return fieldset;
 };

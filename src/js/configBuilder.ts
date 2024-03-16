@@ -11,6 +11,10 @@ export const generateNewBlobConfig = (): BlobConfig => {
     },
     filterId: 'filter',
     color: generateHexColor(),
+    animation: {
+      play: true,
+      speed: 10,
+    },
     seed,
   };
 };

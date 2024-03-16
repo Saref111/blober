@@ -15,12 +15,18 @@ type Transformation = {
   args: number[];
 };
 
+type AnimationParams = {
+  play: boolean;
+  speed: number;
+};
+
 export type BlobConfig = {
   color: string;
   id: string;
   transform: Transformation;
   filterId: string;
   seed: number;
+  animation: AnimationParams;
 };
 
 const getPathString = (cfg: BlobConfig) => {
@@ -41,19 +47,24 @@ const getPathString = (cfg: BlobConfig) => {
       seed: (cfg.seed + 2).toString(),
     }).path,
   ];
-  return `<g style="--color: ${cfg.color};" transform="${cfg.transform.type}(${cfg.transform.args.join(
-    ', '
-  )})" filter="url(#${cfg.filterId})" id="${cfg.id}">
-                <path d="${path}" fill="${cfg.color}" >
-                    <animate 
-                        attributeName="d" 
-                        dur="10s" 
-                        repeatCount="indefinite" 
-                        keyTimes="0;0.33;0.67;1" 
-                        values="${path};${animationPaths.join(';')};${path}" 
-                    />
-                </path>
-            </g>`;
+  return `<g style="--color: ${cfg.color};" transform="${
+    cfg.transform.type
+  }(${cfg.transform.args.join(', ')})" filter="url(#${cfg.filterId})" id="${
+    cfg.id
+  }">
+    <path d="${path}" fill="${cfg.color}" >
+        ${
+          cfg.animation.play &&
+          `<animate 
+              attributeName="d" 
+              dur="${cfg.animation.speed}s" 
+              repeatCount="indefinite"
+              keyTimes="0;0.33;0.67;1" 
+              values="${path};${animationPaths.join(';')};${path}" 
+          />`
+        }
+    </path>
+  </g>`;
 };
 
 const handleSVGGroup = (blobConfig: BlobConfig, blobSVGString: string) => {

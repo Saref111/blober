@@ -2,6 +2,7 @@ import { BlobConfig } from '../blober';
 import { blobStorage } from '../localStorageController';
 import { generateNewBlobConfig } from '../configBuilder';
 import { getFieldset } from './filedsetHandlers';
+import { hydrateFieldset } from './hydrateFieldset';
 
 const updateBlob = (e: Event) => {
   const target = e.target as HTMLInputElement;
@@ -15,6 +16,10 @@ const updateBlob = (e: Event) => {
     updatedBlob.color = target.value;
   } else if (type === 'seed') {
     updatedBlob.seed = parseInt(target.value, 10);
+  } else if (type === 'animation') {
+    updatedBlob.animation.play = target.checked;
+  } else if (type === 'speed') {
+    updatedBlob.animation.speed = parseInt(target.value, 10);
   }
   blobStorage.updateEntity(blob, updatedBlob);
 };
@@ -25,9 +30,38 @@ export const formHandler = (form: HTMLFormElement) => {
   const updateView = (e?: Event) => {
     e?.preventDefault();
     const blobs = blobStorage.getEntities();
-    form.querySelectorAll('.blob-fieldset').forEach((el) => el.remove());
-    blobs.forEach((blob) => {
-      form.insertAdjacentElement('beforeend', getFieldset(blob));
+    const fieldsets = form.querySelectorAll(
+      '.blob-fieldset'
+    ) as NodeListOf<HTMLFieldSetElement>;
+
+    if (!blobs.length) {
+      fieldsets.forEach((el) => el.remove());
+      return;
+    }
+
+    if (!fieldsets.length) {
+      blobs.forEach((blob) => {
+        form.insertAdjacentElement('beforeend', getFieldset(blob));
+      });
+      return;
+    }
+
+    blobs.forEach((blob, i) => {
+      const id = blob.id;
+      const el = form.querySelector(`#blob_${id}`) as HTMLFieldSetElement;
+
+      if (!el) {
+        form.insertAdjacentElement('beforeend', getFieldset(blob));
+        return;
+      }
+
+      const currentIndex = Array.from(form.children).indexOf(el);
+      if (i !== currentIndex) {
+        hydrateFieldset(el, blob);
+        form.insertBefore(el, form.children[currentIndex + 3]);
+      } else {
+        hydrateFieldset(el, blob);
+      }
     });
   };
 
@@ -42,6 +76,6 @@ export const formHandler = (form: HTMLFormElement) => {
     blobStorage.clear();
   });
   document.addEventListener('update', updateView);
-  form.addEventListener('change', updateBlob);
+  form.addEventListener('input', updateBlob);
   updateView();
 };
