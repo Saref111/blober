@@ -8,7 +8,7 @@
     
     <script type="module" crossorigin src="/blober/commonHelpers.js"></script>
     <link rel="modulepreload" crossorigin href="/blober/assets/vendor-a8b16073.js">
-    <link rel="stylesheet" href="/blober/assets/index-ecb37b0a.css">
+    <link rel="stylesheet" href="/blober/assets/index-e8035a41.css">
   </head>
   <body>
     <main>
@@ -26,26 +26,35 @@
                 Copy as base64
               </button>
             </li>
+            <li>
+              <label class="label">
+                <span>Background color:</span>
+                <input type="color" name="bg-color" id="bg-color" value="#F3DDDD">
+              </label>
+            </li>
           </ul>
           <div class="screen-wrapper" width="80vw">
-            <svg class="screen" width="80vw" viewBox="-100 -100 650 650">
-              <circle
-                cx="250"
-                cy="250"
-                r="200"
-                fill="none"
-                stroke="black"
-                stroke-width="2"
-              />
-              <text
-                x="50%"
-                y="50%"
-                text-anchor="middle"
-                font-size="30"
-                fill="black"
-              >
-                Hello, Blob!
-              </text>
+            <svg class="screen" width="100vw" viewBox="-100 -100 650 650">
+              <rect x="-550" y="-100" fill="#F3DDDD" width="300%" height="100%" id="bg-color-screen"/>
+              <g id="main-screen">
+                <circle
+                  cx="250"
+                  cy="250"
+                  r="200"
+                  fill="none"
+                  stroke="black"
+                  stroke-width="2"
+                />
+                <text
+                  x="50%"
+                  y="50%"
+                  text-anchor="middle"
+                  font-size="30"
+                  fill="black"
+                >
+                  Hello, Blob!
+                </text>
+              </g>
             </svg>
           </div>
           <aside class="controls">
