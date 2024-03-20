@@ -3,19 +3,8 @@ export const handleBGColorChange = () => {
   const imageInput = document.getElementById('bg-img') as HTMLInputElement;
 
   colorInput.addEventListener('input', () => {
-    const svg = document.querySelector('.screen') as HTMLElement;
-    // <rect width="100%" height="100%" fill="green" />
-    const rectElement = document.createElementNS(
-      'http://www.w3.org/2000/svg',
-      'rect'
-    );
-    //  viewBox="-100 -100 650 650"
-    rectElement.setAttribute('width', `${svg.clientWidth}px`);
-    rectElement.setAttribute('height', `${svg.clientHeight}px`);
-    rectElement.setAttribute('fill', colorInput.value);
-    rectElement.setAttribute('x', '-550');
-    rectElement.setAttribute('y', '-100');
-    svg.insertAdjacentElement('afterbegin', rectElement);
+    const rect = document.querySelector('#bg-color-screen') as HTMLElement;
+    rect.setAttribute('fill', colorInput.value);
   });
 
   const fileReader = new FileReader();

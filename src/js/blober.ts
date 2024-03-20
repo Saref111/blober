@@ -128,7 +128,7 @@ const generateBlob = (config: BlobConfig, svg: HTMLElement) => {
 };
 
 export const generateBlobs = (blobConfigs: BlobConfig[]) => {
-  const svg = document.querySelector('.screen') as HTMLElement;
+  const svg = document.querySelector('#main-screen') as HTMLElement;
   if (!blobConfigs.length) {
     svg.innerHTML = DEFAULT_SCREEN;
     return;

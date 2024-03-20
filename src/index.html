@@ -38,23 +38,27 @@
           </ul>
           <div class="screen-wrapper" width="80vw">
             <svg class="screen" width="100vw" viewBox="-100 -100 650 650">
-              <circle
-                cx="250"
-                cy="250"
-                r="200"
-                fill="none"
-                stroke="black"
-                stroke-width="2"
-              />
-              <text
-                x="50%"
-                y="50%"
-                text-anchor="middle"
-                font-size="30"
-                fill="black"
-              >
-                Hello, Blob!
-              </text>
+              <rect x="-550" y="-100" fill="red" width="300%" height="100%" id="bg-color-screen"/>
+              <image x="-550" y="-100" width="300%" height="100%" id="bg-image-screen"/>
+              <g id="main-screen">
+                <circle
+                  cx="250"
+                  cy="250"
+                  r="200"
+                  fill="none"
+                  stroke="black"
+                  stroke-width="2"
+                />
+                <text
+                  x="50%"
+                  y="50%"
+                  text-anchor="middle"
+                  font-size="30"
+                  fill="black"
+                >
+                  Hello, Blob!
+                </text>
+              </g>
             </svg>
           </div>
           <aside class="controls">
