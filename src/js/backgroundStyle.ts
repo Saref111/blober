@@ -9,8 +9,12 @@ export const handleBGColorChange = () => {
       'http://www.w3.org/2000/svg',
       'rect'
     );
-    rectElement.setAttribute('width', '100%');
-    rectElement.setAttribute('height', '100%');
+    //  viewBox="-100 -100 650 650"
+    rectElement.setAttribute('width', `${svg.clientWidth}px`);
+    rectElement.setAttribute('height', `${svg.clientHeight}px`);
+    rectElement.setAttribute('fill', colorInput.value);
+    rectElement.setAttribute('x', '-550');
+    rectElement.setAttribute('y', '-100');
     svg.insertAdjacentElement('afterbegin', rectElement);
   });
 
