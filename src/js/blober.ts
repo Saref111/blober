@@ -127,16 +127,21 @@ const generateBlob = (config: BlobConfig, svg: HTMLElement) => {
   svg.insertAdjacentElement('afterbegin', blob);
 };
 
-export const generateBlobs = (blobConfigs: BlobConfig[]) => {
-  const svg = document.querySelector('#main-screen') as HTMLElement;
+export const generateBlobs = () => {
+  const blobConfigs = blobStorage.getEntities();
+  const bgColor = blobStorage.getBGColor();
+  const screen = document.querySelector('#main-screen') as HTMLElement;
+  const bgScreen = document.querySelector('#bg-color-screen') as HTMLElement;
+  
+  bgScreen.setAttribute('fill', bgColor);
   if (!blobConfigs.length) {
-    svg.innerHTML = DEFAULT_SCREEN;
+    screen.innerHTML = DEFAULT_SCREEN;
     return;
   }
-  svg.innerHTML = '';
-  svg.insertAdjacentHTML('beforeend', FILTER);
+  screen.innerHTML = '';
+  screen.insertAdjacentHTML('beforeend', FILTER);
 
   blobConfigs.forEach((config) => {
-    generateBlob(config, svg);
+    generateBlob(config, screen);
   });
 };
