@@ -20,7 +20,7 @@ class LocalStorageController<T> {
     );
     document.dispatchEvent(new Event('update'));
   }
-
+  
   clear() {
     this.entities.clear();
     this.storage.removeItem(this.metakey);

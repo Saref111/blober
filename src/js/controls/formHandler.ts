@@ -2,7 +2,8 @@ import { BlobConfig } from '../blober';
 import { blobStorage } from '../localStorageController';
 import { generateNewBlobConfig } from '../configBuilder';
 import { getFieldset } from './filedsetHandlers';
-import { hydrateFieldset } from './hydrateFieldset';
+
+const DEFAULT_FROM_ELEMENTS_AMOUNT = 4;
 
 const updateBlob = (e: Event) => {
   const target = e.target as HTMLInputElement;
@@ -23,6 +24,7 @@ const updateBlob = (e: Event) => {
   }
   blobStorage.updateEntity(blob, updatedBlob);
 };
+
 
 export const formHandler = (form: HTMLFormElement) => {
   const addBlobButton = form.querySelector('#add-blob') as HTMLButtonElement;
@@ -46,7 +48,16 @@ export const formHandler = (form: HTMLFormElement) => {
       return;
     }
 
-    blobs.forEach((blob, i) => {
+    fieldsets.forEach((el, i) => {
+      const id = el.id.split('_')[1];
+      const blob = blobs.find((blob) => blob.id === id);
+      if (!blob) {
+        el.remove();
+        return;
+      }
+    });
+
+    blobs.forEach((blob, i, a) => {
       const id = blob.id;
       const el = form.querySelector(`#blob_${id}`) as HTMLFieldSetElement;
 
@@ -56,12 +67,10 @@ export const formHandler = (form: HTMLFormElement) => {
       }
 
       const currentIndex = Array.from(form.children).indexOf(el);
-      if (i !== currentIndex) {
-        hydrateFieldset(el, blob);
-        form.insertBefore(el, form.children[currentIndex + 3]);
-      } else {
-        hydrateFieldset(el, blob);
-      }
+      
+      if (i !== currentIndex - DEFAULT_FROM_ELEMENTS_AMOUNT) {
+        form.insertBefore(el, form.children[i + DEFAULT_FROM_ELEMENTS_AMOUNT]);
+      } 
     });
   };
 
