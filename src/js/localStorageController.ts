@@ -4,13 +4,15 @@ class LocalStorageController<T> {
   protected storage = localStorage;
 
   protected entities: Set<T> = new Set();
-
+  protected bgColor: string;
   protected metakey: string;
 
   constructor(metakey: string) {
     this.metakey = metakey;
     const current = JSON.parse(this.storage.getItem(this.metakey) || '[]');
     this.entities = new Set(current);
+
+    this.bgColor = localStorage.getItem(`${metakey}_bgColor`) || '#f3dddd';
   }
 
   protected save() {
@@ -18,13 +20,27 @@ class LocalStorageController<T> {
       this.metakey,
       JSON.stringify(Array.from(this.entities))
     );
+    this.storage.setItem(`${this.metakey}_bgColor`, this.bgColor);
     document.dispatchEvent(new Event('update'));
   }
 
+  setBGColor(color: string) {
+    this.bgColor = color;
+    this.storage.setItem(`${this.metakey}_bgColor`, color);
+    document.dispatchEvent(new Event('update'));
+  }
+  
   clear() {
     this.entities.clear();
     this.storage.removeItem(this.metakey);
+    
+    this.bgColor = '#f3dddd';
+    this.storage.removeItem(`${this.metakey}_bgColor`);
     document.dispatchEvent(new Event('update'));
+  }
+
+  getBGColor() {
+    return this.bgColor;
   }
 
   addEntity(key: T) {

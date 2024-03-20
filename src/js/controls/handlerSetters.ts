@@ -1,12 +1,10 @@
 import { BlobConfig } from '../blober';
 import { blobStorage } from '../localStorageController';
 
-let mouseOverHandler: any = null;
-let mouseOutHandler: any = null;
-let dragStartHandler: any = null;
-let dragOverHandler: any = null;
-let dropHandler: any = null;
-let removeHandler: any = null;
+type Events = Event | DragEvent | MouseEvent | KeyboardEvent;
+type HandlersMap = Record<string, (event: Events) => void>;
+
+const handlerCash = new Map<string, HandlersMap>();
 
 const removeBlob = (id: string) => {
   const blob = blobStorage.findEntity((blob: BlobConfig) => blob.id === id);
@@ -18,6 +16,8 @@ const removeBlob = (id: string) => {
 
 const onFieldsetDrop = (event: DragEvent, id: string) => {
   event.preventDefault();
+  event.stopPropagation();
+
   const draggedId = event.dataTransfer?.getData('text/plain');
   if (draggedId === id) {
     return;
@@ -37,60 +37,88 @@ const onFieldsetDrop = (event: DragEvent, id: string) => {
   );
 };
 
+const getFieldSetId = (fieldset: HTMLFieldSetElement) => {
+  return fieldset.id.split('_')[1];
+};
+
 export const setMouseOver = (fieldset: HTMLFieldSetElement) => {
-  if (mouseOverHandler) {
-    fieldset.removeEventListener('mouseover', mouseOverHandler);
+  let currentFieldsetCash = handlerCash.get(getFieldSetId(fieldset));
+  if (currentFieldsetCash?.mouseOverHandler) {
+    fieldset.removeEventListener(
+      'mouseover',
+      currentFieldsetCash.mouseOverHandler
+    );
   }
-  if (mouseOutHandler) {
-    fieldset.removeEventListener('mouseout', mouseOutHandler);
+  if (currentFieldsetCash?.mouseOutHandler) {
+    fieldset.removeEventListener(
+      'mouseout',
+      currentFieldsetCash.mouseOutHandler
+    );
   }
 
-  mouseOverHandler = () => {
-    const [_, id] = fieldset.id.split('_');
-    const group = document.getElementById(`${id}`);
-    if (!group) return;
-    group.classList.add('hover');
-  };
-  mouseOutHandler = () => {
-    const [_, id] = fieldset.id.split('_');
-    const group = document.getElementById(`${id}`);
-    if (!group) return;
-    group.classList.remove('hover');
-  };
+  handlerCash.set(getFieldSetId(fieldset), {
+    mouseOverHandler: () => {
+      const [_, id] = fieldset.id.split('_');
+      const group = document.getElementById(`${id}`);
+      if (!group) return;
+      group.classList.add('hover');
+    },
+    mouseOutHandler: () => {
+      const [_, id] = fieldset.id.split('_');
+      const group = document.getElementById(`${id}`);
+      if (!group) return;
+      group.classList.remove('hover');
+    },
+  });
 
-  fieldset.addEventListener('mouseover', mouseOverHandler);
-  fieldset.addEventListener('mouseout', mouseOutHandler);
+  currentFieldsetCash = handlerCash.get(getFieldSetId(fieldset));
+  if (!currentFieldsetCash) return;
+
+  fieldset.addEventListener('mouseover', currentFieldsetCash.mouseOverHandler);
+  fieldset.addEventListener('mouseout', currentFieldsetCash.mouseOutHandler);
 };
 
 export const setDragNDropHandlers = (
   fieldset: HTMLFieldSetElement,
   id: string
 ) => {
-  if (dragStartHandler) {
-    fieldset.removeEventListener('dragstart', dragStartHandler);
+  let currentFieldsetCash = handlerCash.get(getFieldSetId(fieldset));
+  if (currentFieldsetCash?.dragStartHandler) {
+    fieldset.removeEventListener(
+      'dragstart',
+      currentFieldsetCash.dragStartHandler
+    );
   }
 
-  if (dragOverHandler) {
-    fieldset.removeEventListener('dragover', dragOverHandler);
+  if (currentFieldsetCash?.dragOverHandler) {
+    fieldset.removeEventListener(
+      'dragover',
+      currentFieldsetCash.dragOverHandler
+    );
   }
 
-  if (dropHandler) {
-    fieldset.removeEventListener('drop', dropHandler);
+  if (currentFieldsetCash?.dropHandler) {
+    fieldset.removeEventListener('drop', currentFieldsetCash.dropHandler);
   }
 
-  dragStartHandler = (event: DragEvent) => {
-    event.dataTransfer?.setData('text/plain', id);
-  };
+  handlerCash.set(getFieldSetId(fieldset), {
+    dragStartHandler: (event) => {
+      if (!('dataTransfer' in event)) return;
+      event.dataTransfer?.setData('text/plain', id);
+    },
+    dragOverHandler: (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+    },
+    dropHandler: (e) => onFieldsetDrop(e as DragEvent, id),
+  });
 
-  dropHandler = (e: DragEvent) => onFieldsetDrop(e, id);
+  currentFieldsetCash = handlerCash.get(getFieldSetId(fieldset));
+  if (!currentFieldsetCash) return;
 
-  dragOverHandler = (event: DragEvent) => {
-    event.preventDefault();
-  };
-
-  fieldset.addEventListener('dragstart', dragStartHandler);
-  fieldset.addEventListener('drop', dropHandler);
-  fieldset.addEventListener('dragover', dragOverHandler);
+  fieldset.addEventListener('dragstart', currentFieldsetCash.dragStartHandler);
+  fieldset.addEventListener('drop', currentFieldsetCash.dropHandler);
+  fieldset.addEventListener('dragover', currentFieldsetCash.dragOverHandler);
 };
 
 export const setFieldsetAttrs = (
@@ -108,12 +136,21 @@ export const setRemoveButton = (fieldset: HTMLFieldSetElement, id: string) => {
   const removeButton = fieldset.querySelector(
     '.remove-blob'
   ) as HTMLButtonElement;
-
-  if (removeHandler) {
-    removeButton.removeEventListener('click', removeHandler);
+  let currentFieldsetCash = handlerCash.get(getFieldSetId(fieldset));
+  if (currentFieldsetCash?.removeHandler) {
+    removeButton.removeEventListener(
+      'click',
+      currentFieldsetCash.removeHandler
+    );
   }
 
-  removeHandler = () => removeBlob(id);
+  handlerCash.set(getFieldSetId(fieldset), {
+    removeHandler: () => {
+      removeBlob(id);
+    },
+  });
 
-  removeButton.addEventListener('click', removeHandler);
+  currentFieldsetCash = handlerCash.get(getFieldSetId(fieldset));
+  if (!currentFieldsetCash) return;
+  removeButton.addEventListener('click', currentFieldsetCash.removeHandler);
 };
